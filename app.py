@@ -12,7 +12,7 @@ from leancloud import LeanCloudError
 from views.todos import todos_view
 
 app = Flask(__name__)
-CORS(app, resource=r'/*')
+# CORS(app, resource=r'/*')
 sockets = Sockets(app)
 
 # routing

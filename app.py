@@ -5,12 +5,14 @@ from datetime import datetime
 import leancloud
 from flask import Flask, jsonify, request
 from flask import render_template
+from flask_cors import CORS
 from flask_sockets import Sockets
 from leancloud import LeanCloudError
 
 from views.todos import todos_view
 
 app = Flask(__name__)
+CORS(app, resource=r'/*')
 sockets = Sockets(app)
 
 # routing
@@ -20,6 +22,15 @@ app.register_blueprint(todos_view, url_prefix='/todos')
 @app.route('/')
 def index():
     return render_template('index.html')
+
+from flask_pymongo import PyMongo
+
+@app.route('/test', methods=['GET'])
+def test():
+    mongo = PyMongo(app, uri='mongodb+srv://admin:admin@cluster0.0doavhn.mongodb.net/db?retryWrites=true&w=majority')
+    user = {'name': request.args['name'], 'age': request.args['age']}
+    mongo.db.runoob.insert_one(user)
+    return request.args['name']
 
 
 @app.route('/time')
